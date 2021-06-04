@@ -45,7 +45,7 @@ def optimal_change(item_cost, amount_paid):
     else:
         return 'Insufficient amount.'
 
-    return (f'The optimal change for an item that costs ${item_cost} with an amount paid of ${amount_paid} is', find_dollar(dollar))
+    return (f'The optimal change for an item that costs ${item_cost} with an amount paid of ${amount_paid} is', find_dollar(dollar), find_coin(cent))
 
 #2. function calculate dollars
 def find_dollar(dollar):
@@ -58,7 +58,6 @@ def find_dollar(dollar):
     ten     = 0
     five    = 0
     one     = 0
-    print('dollar function', dollar)
 
     while (dollar != 0):
         if (dollar >= 100):
@@ -103,21 +102,32 @@ def find_coin(cent):
             print('quarter:', quarter)
             cent = cent - 0.25 * quarter
             print('amount total:', cent)
+            coin_str += str(f"{quarter:.0f} ") + COIN[0.25]
+            
         elif (cent >= 0.10):
             dime += (cent // 0.10)
             print('dime:', dime)
             cent = cent - 0.10 * dime
             print('amount total:', cent)
+            coin_str += str(f"{dime:.0f} ") + COIN[0.10]
+            
         elif (cent >= 0.05):
             nickel += (cent // 0.05)
             print('nickel:', nickel)
             cent = cent - 0.10 * nickel
             print('amount total:', cent)
+            coin_str += str(f"{nickel:.0f} ") + COIN[0.05]
+            
         elif (cent >= 0.01):
             penny += (cent // 0.01)
             print('penny:', penny)
             cent = cent - 0.10 * penny
             print('amount total:', cent)
-    print('final coin: ', cent) 
+            coin_str += str(f"{penny:.0f} ") + COIN[0.01]
+        # print('final coin: ', cent)
+        return coin_str
+        break
+    
 
 # print(optimal_change(1,1226))
+print(optimal_change(4.01,5))
