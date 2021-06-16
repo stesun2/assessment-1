@@ -1,5 +1,4 @@
 # Write your solution here!
-
 # create Bills and Coins Dictionary
 # TODO
 # Correct execution (i.e. runs without any errors)
@@ -8,44 +7,50 @@
 # Correct pluralization in output ("bills", "dimes", "pennies", etc..)
 # Correct handling of edge cases / special cases (single denomination, exact payment, under payment)
 
+# optimal_change(62.13, 100)
 # "The optimal change for an item that costs $62.13 with an amount paid of $100 is 1 $20 bill, 1 $10 bill, 1 $5 bill, 2 $1 bills, 3 quarters, 1 dime, and 2 pennies."
 
+# optimal_change(31.51, 50)
+# "The optimal change for an item that costs $31.51 with an amount paid of $50 is 1 $10 bill, 1 $5 bill, 3 $1 bills, 1 quarter, 2 dimes, and 4 pennies."
+
+import math
+
 BILL = {
-    100: '$100 bill, ',
-    50:  '$50 bill, ',
-    20:  '$20 bill, ',
-    10:  '$10 bill, ',
-    5:   '$5 bill, ',
-    1:   '$1 bill, '
+    100: '$100 ',
+    50:  '$50 ',
+    20:  '$20 ',
+    10:  '$10 ',
+    5:   '$5 ',
+    1:   '$1 '
 }
 
 COIN = {
-    0.25: 'quarter',
-    0.10: 'dime',
-    0.05: 'nickel',
-    0.01: 'penny'
+    25: 'quarter, ',
+    10: 'dime, ',
+    5: 'nickel, ',
+    1: 'penny. '
 }
 
-# str_msg = 'The optimal change for an item that costs '
-
 def optimal_change(item_cost, amount_paid):
-    # change = 0
+    # return string text
+    change_str = f'The optimal change for an item that costs ' + f'${item_cost:.2f}' ' with an amount paid of $' f'{amount_paid} ' + 'is '
 
+    # check to see if amount on hand is greater than item cost
     if amount_paid >= item_cost:
         change = amount_paid - item_cost
+        # check to see if it is exact change
+        if change == 0:
+            return change_str + 'no change.'
 
         # string manipulation seperate dollars and cents
         dollar = float(f'{change:.0f}')
-        cent   = float(f'{change:.2f}') - dollar
-
-        # calling dollar and coin function to find number optimal amount
-        # find_coin(cent)
-        # find_dollar(dollar)
+        cent   = float(f'{change:.2f}') - dollar 
+        cent = round(cent * 100)   # Convert to integer
 
     else:
         return 'Insufficient amount.'
-
-    return (f'The optimal change for an item that costs ${item_cost} with an amount paid of ${amount_paid} is', find_dollar(dollar), find_coin(cent))
+    # Calling dollar and coin function print out string.
+    return (change_str + find_dollar(dollar) + find_coin(cent))
 
 #2. function calculate dollars
 def find_dollar(dollar):
@@ -59,32 +64,55 @@ def find_dollar(dollar):
     five    = 0
     one     = 0
 
-    while (dollar != 0):
+    while (dollar > 0):
         if (dollar >= 100):
             hundred += (dollar // 100)
             dollar = dollar - 100 * hundred
-            dollar_str += str(f'{hundred:.0f} ') + BILL[100]
+            if hundred >1 :
+                dollar_str += str(f'{hundred:.0f} ') + BILL[100] + 'bills, '
+            else:
+                dollar_str += str(f'{hundred:.0f} ') + BILL[100] + 'bill, '
+
         elif (dollar >= 50):
             fifty += (dollar // 50)
             dollar = dollar - 50 * fifty
-            dollar_str += str(f'{fifty:.0f} ') + BILL[50]
+            if fifty > 1:
+                dollar_str += str(f'{fifty:.0f} ') + BILL[50] + 'bills, '
+            else:
+                dollar_str += str(f'{fifty:.0f} ') + BILL[50] + 'bill, '
+
         elif (dollar >= 20):
             twenty += (dollar // 20)
             dollar = dollar - 20 * twenty
-            dollar_str += str(f'{twenty:.0f} ') + BILL[20]
+            if twenty > 1:
+                dollar_str += str(f'{twenty:.0f} ') + BILL[20] + 'bills, '
+            else:
+                dollar_str += str(f'{twenty:.0f} ') + BILL[20] + 'bill, '
+
         elif (dollar >= 10):
             ten += (dollar // 10)
             dollar = dollar - 10 * ten
-            dollar_str += str(f'{ten:.0f} ') + BILL[10]
+            if ten > 1:
+                dollar_str += str(f'{ten:.0f} ') + BILL[10] + 'bills, '
+            else:
+                dollar_str += str(f'{ten:.0f} ') + BILL[10] + 'bill, '
+
         elif (dollar >= 5):
             five += (dollar // 5)
             dollar = dollar - 5 * five
-            dollar_str += str(f'{five:.0f} ') + BILL[5]
+            if five > 1:
+                dollar_str += str(f'{five:.0f} ') + BILL[5] + 'bills, '
+            else:
+                dollar_str += str(f'{five:.0f} ') + BILL[5] + 'bill, '
+
         elif (dollar >= 1):
             one += (dollar // 1)
             dollar = dollar - 1 * one
-            dollar_str += str(f'{one:.0f} ') + BILL[1]
-    # print(dollar_str)
+            if one > 1:
+                dollar_str += str(f'{one:.0f} ') + BILL[1] + 'bills, '
+            else:
+                dollar_str += str(f'{one:.0f} ') + BILL[1] + 'bill, '
+
     return dollar_str
 
 #3. function calculate coins
@@ -95,39 +123,38 @@ def find_coin(cent):
     dime    = 0
     nickel  = 0
     penny   = 0 
-    print('coin function', cent)
-    while (cent != 0):
-        if (cent >= 0.25):
-            quarter += (cent // 0.25)
-            print('quarter:', quarter)
-            cent = cent - 0.25 * quarter
-            print('amount total:', cent)
-            coin_str += str(f"{quarter:.0f} ") + COIN[0.25]
-            
-        elif (cent >= 0.10):
-            dime += (cent // 0.10)
-            print('dime:', dime)
-            cent = cent - 0.10 * dime
-            print('amount total:', cent)
-            coin_str += str(f"{dime:.0f} ") + COIN[0.10]
-            
-        elif (cent >= 0.05):
-            nickel += (cent // 0.05)
-            print('nickel:', nickel)
-            cent = cent - 0.10 * nickel
-            print('amount total:', cent)
-            coin_str += str(f"{nickel:.0f} ") + COIN[0.05]
-            
-        elif (cent >= 0.01):
-            penny += (cent // 0.01)
-            print('penny:', penny)
-            cent = cent - 0.10 * penny
-            print('amount total:', cent)
-            coin_str += str(f"{penny:.0f} ") + COIN[0.01]
-        # print('final coin: ', cent)
-        return coin_str
-        break
-    
 
-# print(optimal_change(1,1226))
-print(optimal_change(4.01,5))
+    while (cent > 0):
+        if (cent >= 25):
+            quarter += (cent // 25)
+            cent = cent - 25 * quarter
+            if quarter > 1:
+                coin_str += str(f"{quarter:.0f} ") + 'quarters, '
+            else:
+                coin_str += str(f"{quarter:.0f} ") + COIN[25]
+            
+        elif (cent >= 10):
+            dime += (cent // 10)
+            cent = cent - 10 * dime
+            if dime > 1:
+                coin_str += str(f"{dime:.0f} ") + 'dimes, '
+            else:
+                coin_str += str(f"{dime:.0f} ") + COIN[10]
+            
+        elif (cent >= 5):
+            nickel += (cent // 5)
+            cent = cent - 5 * nickel
+            if nickel > 1:
+                coin_str += str(f"{nickel:.0f} ") + 'nickels, '
+            else:
+                coin_str += str(f"{nickel:.0f} ") + COIN[5]
+            
+        elif (cent >= 1):
+            penny += (cent // 1)
+            cent = cent - 1 * penny
+            if penny > 1:
+                coin_str += str(f"and {penny:.0f} ") + 'pennies.'
+            else:
+                coin_str += str(f"and {penny:.0f} ") + COIN[1]
+
+    return coin_str
